@@ -1,5 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import connectDB from './config/connectDB'
 require('dotenv').config()
 
 import viewEngine from './config/viewEngine'
@@ -12,6 +13,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 viewEngine(app)
 initWebRoute(app)
+
+connectDB()
 
 const port = process.env.PORT || 3000
 
