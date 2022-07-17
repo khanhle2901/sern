@@ -35,6 +35,66 @@ const hashUserPassWord = (password) => {
   })
 }
 
+const getAllUser = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const users = await db.User.findAll({ raw: true })
+      resolve(users)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+const getUserById = (userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const user = await db.User.findOne({ where: { id: userId }, raw: true })
+      if (user) {
+        resolve(user)
+      } else {
+        resolve({})
+      }
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+const updateUser = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await db.User.findOne({ where: { id: data.userId } })
+      if (user) {
+        user.firstName = data.firstName
+        user.lastName = data.lastName
+        user.address = data.address
+        await user.save()
+        resolve()
+      } else {
+        resolve()
+      }
+    } catch (error) {
+      reject(error)
+    }
+  })
+  console.log('data', data)
+}
+
+const deleteUser = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const user = await db.User.findOne({ where: { id } })
+      if (user) {
+        await user.destroy()
+      }
+      resolve()
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
 const hash = bcrypt.hashSync('B4c0//', salt)
 
-module.exports = { ceateNewUser }
+module.exports = { ceateNewUser, getAllUser, getUserById, updateUser, deleteUser }
